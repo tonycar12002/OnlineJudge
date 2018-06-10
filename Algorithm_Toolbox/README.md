@@ -35,5 +35,5 @@
         * Longest Common Subsequence
         * Reconstruct Aligment
 * Week 06 - Dynamic Programming II
-    * KnapSack
+    * Discrete KnapSack
     * Placing Parentheses
