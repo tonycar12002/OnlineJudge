@@ -26,11 +26,14 @@
         * Non-Comparision Based Sort
     * Closest Pair
 * Week 05 - Dynamic Programming
-    * Money Chanhe
+    * Money Change
         * Naive Solution
         * Dynamic Programming
     * String Comparison
         * The Aligment Game
         * Edit Distance
+        * Longest Common Subsequence
         * Reconstruct Aligment
-* Week 06
+* Week 06 - Dynamic Programming II
+    * KnapSack
+    * Placing Parentheses
