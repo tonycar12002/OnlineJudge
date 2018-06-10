@@ -25,9 +25,23 @@ void DP(int num){
 	}
 	cout << num_DP[num] << endl;
 	std::vector<int> seq_num;
-	for(int i = num ; i>=2; i++){	
-		
+	int tmp = num;
+	while(tmp>1){
+		seq_num.push_back(tmp);
+		if(tmp%3==0 && num_DP[tmp] - num_DP[tmp/3] == 1)
+			tmp /= 3;
+		else if(tmp%2==0 && num_DP[tmp] - num_DP[tmp/2] == 1)
+			tmp /= 2;
+		else if(tmp%1==0 && num_DP[tmp] - num_DP[tmp-1] == 1)
+			tmp -= 1;
+		else;
 	}
+	seq_num.push_back(tmp);
+	for(int i = seq_num.size()-1 ; i>0 ; i--){
+		cout << seq_num[i] << " ";
+	}	
+	cout << seq_num[0] << endl;
+
 	delete num_DP;
 }
 int main()
