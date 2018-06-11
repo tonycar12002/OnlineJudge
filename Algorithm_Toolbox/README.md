@@ -36,4 +36,7 @@
         * Reconstruct Aligment
 * Week 06 - Dynamic Programming II
     * Discrete KnapSack
+        * KnapSack with Repetitions
+        * KnapSack without Repetitions
     * Placing Parentheses
+        * Min and Max Result
