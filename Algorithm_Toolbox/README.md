@@ -1,4 +1,4 @@
-# Algorithm Toolbox
+# Algorithmic Toolbox | Coursera
 ## Contents
 * Week 01 - Introduction
 * Week 02 - Warm up
