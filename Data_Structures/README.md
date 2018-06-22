@@ -4,3 +4,5 @@
 	* Arrays and Linked Lists
 	* Stack and Queue
 	* Tree
+* Week02 - Dynamic Arrays amd Amortized Analysis
+* Week03 - 
