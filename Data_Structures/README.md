@@ -4,5 +4,8 @@
 	* Arrays and Linked Lists
 	* Stack and Queue
 	* Tree
-* Week02 - Dynamic Arrays amd Amortized Analysis
-* Week03 - 
+* Week02 - Dynamic Arrays and Amortized Analysis
+* Week03 - Priority Queues and Disjoint Sets
+	* Priority Queues
+		* Heaps - Binary Tree
+		* Heap sort
