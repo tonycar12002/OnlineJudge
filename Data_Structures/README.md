@@ -9,3 +9,7 @@
 	* Priority Queues
 		* Heaps - Binary Tree
 		* Heap sort
+		* Binary Min-Heap
+	* Disjoint Sets
+		* Naive Implementations
+		* Efficient Implementations
