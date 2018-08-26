@@ -10,6 +10,8 @@
 		* Heaps - Binary Tree
 		* Heap sort
 		* Binary Min-Heap
+		* [Binary Min-Heap](https://www.cs.usfca.edu/~galles/visualization/Heap.html)
 	* Disjoint Sets
 		* Naive Implementations
 		* Efficient Implementations
+		* [Disjoint Visualization](https://www.cs.usfca.edu/~galles/visualization/DisjointSets.html)
