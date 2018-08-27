@@ -15,3 +15,6 @@
 		* Naive Implementations
 		* Efficient Implementations
 		* [Disjoint Visualization](https://www.cs.usfca.edu/~galles/visualization/DisjointSets.html)
+* Week04 - Hashing
+	* Introduction, Direct Addressing and Chaining
+	* 
