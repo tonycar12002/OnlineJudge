@@ -15,8 +15,8 @@ public:
 
 class PhoneBook{
 private:
-  int a = 34;
-  int b = 2;
+  int a = 1;
+  int b = 0;
   int prime = 1000003;
   int hash_size = 1000 ;
   Query *queries;
@@ -48,6 +48,7 @@ public:
         que = next;
         next = que -> next_phone;
       }
+     
     }
     if(!find){
       que -> next_phone = new Query(name, number);
@@ -72,21 +73,20 @@ public:
 
   void deleteBook(int number){
     int hash_value = hashFunction(number);
-    Query *que = queries[hash_value].next_phone;
-    Query *last = &queries[hash_value];
+    Query *que = &queries[hash_value];
+    Query *next = queries[hash_value].next_phone;
 
-    while(que){
-      if (que -> number == number){
-        last->next_phone = que -> next_phone;
-        delete que;
-        return ;
+    while(next){
+      if (next -> number == number){
+        que -> next_phone = next -> next_phone;
+        return;
       }
       else{
-        last = que;
-        que = que -> next_phone;
+        que = next;
+        next = que -> next_phone;
       }
     }
-  
+    
   }
   void readData(){
     int n;
@@ -103,13 +103,13 @@ public:
         deleteBook(number);
       }
       else if(type == "find"){
-        //ans.push_back(findBook(number));
-        cout << findBook(number) << endl;
+        ans.push_back(findBook(number));
+        //cout << findBook(number) << endl;
       }
     }
-  /*
+  
     for (int i=0;i<ans.size();i++)
-      cout << ans[i] << endl;*/
+      cout << ans[i] << endl;
   }
   
 
