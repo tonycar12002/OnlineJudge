@@ -1,4 +1,8 @@
-// Hashing with liked list
+/* 
+Hashing with liked list
+large number mod will cause nagative number
+-2 % 3 == -2 != 1%3 ==1
+*/
 #include <iostream>
 #include <vector>
 #include <string>
@@ -35,7 +39,7 @@ public:
         pow_num = pow_num * x % prime; 
       tmp = tmp + ascii * ( pow_num % prime )  ;
       tmp %= prime;
-      // large number mod will cause nagative number
+      
       //cout << ascii << " " << pow(x, i) << " " << prime  << " , tmp = " << tmp  << ", pow_num % prime = " <<( pow_num % prime ) << endl;
     }
     tmp = tmp % hash_size;
