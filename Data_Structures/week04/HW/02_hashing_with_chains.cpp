@@ -1,3 +1,4 @@
+// Hashing with liked list
 #include <iostream>
 #include <vector>
 #include <string>
@@ -28,10 +29,14 @@ public:
   int hashFunction(string word){
     long long int tmp = 0;
     for(int i=0;i<word.size();i++){
-      int ascii = word[i];
-      tmp = tmp + ascii * (long long int)pow(x, i)  ;
+      long long int ascii = word[i];
+      long long int pow_num = 1;
+      for(int h = 0 ; h<i; h++)
+        pow_num = pow_num * x % prime; 
+      tmp = tmp + ascii * ( pow_num % prime )  ;
       tmp %= prime;
-      //cout << ascii << " " << pow(x, i) << " " << prime  << " ";
+      // large number mod will cause nagative number
+      //cout << ascii << " " << pow(x, i) << " " << prime  << " , tmp = " << tmp  << ", pow_num % prime = " <<( pow_num % prime ) << endl;
     }
     tmp = tmp % hash_size;
     //cout << tmp << endl;

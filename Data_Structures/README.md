@@ -22,4 +22,11 @@
 		* Hashing Strings
 	* Searching Patterns
 		* Rabin-Karp's Algorithm
+* Week05 - Binary Search Tree
+	* BST Trees
+	* AVL Trees
+		* [AVL Trees Visualization](https://www.cs.usfca.edu/~galles/visualization/AVLtree.html)
+* Week06 - Binary Search Tree 2
+	* Splay Trees
+
 
