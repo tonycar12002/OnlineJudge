@@ -1,4 +1,4 @@
-#include <algorithm>
+   #include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -8,19 +8,19 @@ using std::endl;
 using std::vector;
 
 struct Node {
-  int key;
-  int left;
-  int right;
+  long long int key;
+  long long int left;
+  long long int right;
 
   Node() : key(0), left(-1), right(-1) {}
-  Node(int key_, int left_, int right_) : key(key_), left(left_), right(right_) {}
+  Node(long long int key_, long long int left_, long long int right_) : key(key_), left(left_), right(right_) {}
 };
 
-bool IsTreeInRange(const vector<Node>& tree, int root, int range_min, int range_max){
-  int key = tree[root].key;
-  int left = tree[root].left;
-  int right = tree[root].right;
-  if( key < range_min || key > range_max ){
+bool IsTreeInRange(const vector<Node>& tree, long long int root, long long int range_min, long long int range_max){
+  long long int key = tree[root].key;
+  long long int left = tree[root].left;
+  long long int right = tree[root].right;
+  if( key < range_min || key >= range_max ){
     return false;
   }
   else{
@@ -37,19 +37,20 @@ bool IsTreeInRange(const vector<Node>& tree, int root, int range_min, int range_
 
 bool IsBinarySearchTree(const vector<Node>& tree) {
   // Implement correct algorithm here
-  return IsTreeInRange(tree, 0, -2147483647, 2147483647);
+  return IsTreeInRange(tree, 0, -2147483699, 2147483699);
 }
 
 int main() {
-  int nodes;
+  long long int nodes;
   cin >> nodes;
   vector<Node> tree;
-  for (int i = 0; i < nodes; ++i) {
-    int key, left, right;
+  for (long long int i = 0; i < nodes; ++i) {
+    long long int key, left, right;
     cin >> key >> left >> right;
     tree.push_back(Node(key, left, right));
   }
-  if(nodes == 0){
+
+  if(nodes == 0 || nodes == 1){
     cout << "CORRECT" <<endl;
   }
   else if (IsBinarySearchTree(tree)) {
