@@ -4,6 +4,7 @@
 	* Arrays and Linked Lists
 	* Stack and Queue
 	* Tree
+		* In-order, pre-order, post-order
 * Week02 - Dynamic Arrays and Amortized Analysis
 * Week03 - Priority Queues and Disjoint Sets
 	* Priority Queues
