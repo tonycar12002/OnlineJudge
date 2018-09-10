@@ -30,5 +30,6 @@
 * Week06 - Binary Search Tree 2
 	* Splay Trees
 		* [Splay Trees Visualization](https://www.cs.usfca.edu/~galles/visualization/SplayTree.html)
+	* Rope
 
 

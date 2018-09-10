@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stdio.h>
 
 using namespace std;
 class Vertex{
@@ -40,8 +41,10 @@ public:
         splay(min_root_right_subtree);
         min_root_right_subtree->left = left_subtree_root;
         root = min_root_right_subtree;
-        if(left_subtree_root)
+        if(left_subtree_root){
           left_subtree_root->parent = root;
+          root->sum += left_subtree_root->sum;
+        }
       }
       else if(search_vertex->left){
         search_vertex->left->parent = NULL;
@@ -54,30 +57,46 @@ public:
 
 
   void sum(long long int left, long long int right){
-    last_sum = 0;
-    rangeSum(root, left, right);
-    cout << last_sum << endl;
-  }
 
-  void rangeSum(Vertex* node, long long int left, long long int right){
-    if(!node)
+    if(!root){
+      last_sum = 0;
+      cout << last_sum << endl;
       return;
-    if(node->key <= right && node->key >= left){
-      last_sum += node->key;
-      if(node->right)
-        rangeSum(node->right, left, right);
-      if(node->left)
-        rangeSum(node->left, left, right); 
     }
-    else if(node->key < left){
-      if(node->right)
-        rangeSum(node->right, left, right);
+    long long int left_sum=0, right_sum=0;
+    Vertex *search_vertex = searchVertex(left);
+    splay(search_vertex);
+    if(root->key >= left){
+      left_sum = root->sum - root->key;
     }
-    else if(node->key > right){
-      if(node->left)
-        rangeSum(node->left, left, right);      
+    else{
+      left_sum = root->sum;
     }
-    else;
+    if(root->right)
+      left_sum -= root->right->sum;
+    
+    //printf("root key = %lld, root sum = %lld\n", root->key, root->sum);
+    search_vertex = searchVertex(right);
+    splay(search_vertex);
+   // printf("root key = %lld, root sum = %lld\n", root->key, root->sum);
+    if(root->key > right){
+      right_sum = root->sum - root->key;
+    }
+    else{
+      right_sum = root->sum;
+    }
+    if(root->right)
+      right_sum -= root->right->sum;
+
+    last_sum = right_sum-left_sum;
+    //printf("left sum = %lld, right_sum = %lld\n", left_sum, right_sum);
+    //printf("============\n");
+    if(last_sum>=0){
+      cout << last_sum << endl;
+    }
+    else{
+      cout << last_sum << endl;
+    }
   }
 
   void insert(long long int key){
@@ -85,23 +104,30 @@ public:
     
     if(!search_vertex){
       root = new Vertex(key, NULL);
-      //root -> sum = key;
+      root -> sum = key;
     }
     else if (search_vertex->key != key){
       // Insert Elements
       Vertex *new_ver = new Vertex(key, search_vertex);
+      new_ver->sum = key;
       if(search_vertex->key > key){
         search_vertex -> left = new_ver;
       }
       else{
         search_vertex -> right = new_ver;
       }
+      while(search_vertex){
+        search_vertex->sum += new_ver->sum;
+        search_vertex = search_vertex->parent;
+      }
+      
       //Splay Tree
       splay(new_ver);
     }
     else{
       splay(search_vertex);
     }
+    //cout << key << endl;
     return;
   }
   void splay(Vertex* node){
@@ -123,9 +149,14 @@ public:
   }
 
   void rightRotation(Vertex* node, Vertex* parent){
+    parent->sum -= node->sum;
     if(node->right){
       node->right->parent = parent;
+      parent->sum += node->right->sum;
+      node->sum -= node->right->sum;
     }
+    node->sum += parent->sum;
+
     parent->left = node->right;
 
     if(!parent->parent){
@@ -142,11 +173,17 @@ public:
     node->right = parent;
     parent->parent = node;
 
+
   }
   void leftRotation(Vertex* node, Vertex* parent){
+    parent->sum -= node->sum;
     if(node->left){
       node->left->parent = parent;
+      parent->sum += node->left->sum;
+      node->sum -= node->left->sum;
     }
+    node->sum += parent->sum;
+
     parent->right = node->left;
 
     if(!parent->parent){
