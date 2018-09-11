@@ -1,5 +1,3 @@
-# Data Preprocessing Template
-
 # Importing the libraries
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,7 +25,7 @@ X[:, 1:3] =imputer.transform( X[:, 1:3] )
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 labelencoder_X = LabelEncoder()
 X[:, 0] = labelencoder_X.fit_transform(X[:, 0])
-# Create columns with dummy variables to replace string
+# Create columns with dummy variables to replace number after label encoder
 onehotencoder = OneHotEncoder(categorical_features= [0])
 X = onehotencoder.fit_transform(X).toarray()
 labelencoder_Y = LabelEncoder()
