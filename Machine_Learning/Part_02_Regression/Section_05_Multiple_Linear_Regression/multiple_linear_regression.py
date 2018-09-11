@@ -44,25 +44,22 @@ import statsmodels.formula.api as sm
 # insert columns with x0 = 1 into first column
 # y = bo + b1*x1 + b2*x2 + b3*x3  => y = bo*x0 + b1*x1 + b2*x2 + b3*x3
 X = np.append(arr = np.ones((50, 1)).astype(int), values = X, axis = 1)
+regressor_OLS = LinearRegression()
+
+def backwardElimination(x, sl):
+    results = sm.OLS(endog = y, exog= x).fit()
+    max_p_index = np.argmax(results.pvalues)
+    max_p = results.pvalues[max_p_index]
+    
+    if max_p >= sl:
+        x = np.delete(x, max_p_index, axis =1)
+        backwardElimination(x, sl)
+    else:
+        print (results.summary())
 X_opt = X[:, [0, 1, 2, 3, 4, 5]]
-regressor_OLS = sm.OLS(endog = y, exog= X_opt).fit()
-print (regressor_OLS.summary() )
-# Remove the highest p-value which SL > 0.05
-X_opt = X[:, [0, 1, 3, 4, 5]]
-regressor_OLS = sm.OLS(endog = y, exog= X_opt).fit()
-print (regressor_OLS.summary() )
-# Remove the highest p-value which SL > 0.05
-X_opt = X[:, [0, 3, 4, 5]]
-regressor_OLS = sm.OLS(endog = y, exog= X_opt).fit()
-print (regressor_OLS.summary() )
-# Remove the highest p-value which SL > 0.05
-X_opt = X[:, [0, 3, 5]]
-regressor_OLS = sm.OLS(endog = y, exog= X_opt).fit()
-print (regressor_OLS.summary() )
-# Remove the highest p-value which SL > 0.05
-X_opt = X[:, [0, 3]]
-regressor_OLS = sm.OLS(endog = y, exog= X_opt).fit()
-print (regressor_OLS.summary() )
+results = backwardElimination(X_opt, 0.08)
+
+
 
 
 

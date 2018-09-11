@@ -8,4 +8,9 @@ dataset: https://www.superdatascience.com/machine-learning/
   * Simple Linear Regression
   * Multiple Linear Regression
     * [Backward Elimination](http://www.thejavageek.com/2018/02/14/backward-elimination-multiple-linear-regression/)
+  * Polynomial Regression
+  * Support Vector Regression (SVR)
+  * Decision Tree Regression  
+  * Random Forest Regression
+  * Evaluating Regression Models Performance
   
