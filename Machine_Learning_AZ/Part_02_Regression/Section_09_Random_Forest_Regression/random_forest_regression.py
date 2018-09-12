@@ -8,9 +8,11 @@ X = dataset.iloc[:, 1:2].values
 y = dataset.iloc[:, 2].values
 
 # Fitting the Random Forest Regression to the dataset
-from sklearn.tree import DecisionTreeRegressor
-regressor = DecisionTreeRegressor(random_state= 0)
+from sklearn.ensemble import RandomForestRegressor
+regressor = RandomForestRegressor(n_estimators= 10, random_state= 0 )
 regressor.fit(X, y)
+
+
 
 # Prediction
 y_pred = regressor.predict(6.5)
