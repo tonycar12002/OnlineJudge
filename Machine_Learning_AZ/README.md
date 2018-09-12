@@ -13,6 +13,7 @@ dataset: https://www.superdatascience.com/machine-learning/ </br>
   * Support Vector Regression (SVR)
     * [SVM](https://www.youtube.com/watch?v=Y6RRHw9uN9o)
   * Decision Tree Regression  
+    * [Decision Tree](https://medium.com/@yehjames/資料分析-機器學習-第3-5講-決策樹-decision-tree-以及隨機森林-random-forest-介紹-7079b0ddfbda)
   * Random Forest Regression
   * Evaluating Regression Models Performance
   
