@@ -2,3 +2,4 @@
 *.vscode
 *.out
 test
+.ipynb_checkpoints
