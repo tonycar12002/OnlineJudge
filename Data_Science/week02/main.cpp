@@ -2,10 +2,10 @@
 #include <cstdio>
 #include <sstream>
 #include <string.h>
-#include <boost/iostreams/device/mapped_file.hpp> 
 #include <algorithm>
 #include <time.h>
-#include<fstream>
+#include <fstream>
+#include <vector>
 
 using namespace std;
 class Node{
@@ -15,9 +15,10 @@ public:
     Node* next_item = NULL;
     vector<Node*> children;
 
-    Node():counts(0){}
+    Node():counts(0), item(-1){}
     Node(int itm):item(itm), counts(0){}
     Node(int itm, int cnts):item(itm), counts(cnts){}
+    Node(int itm, int cnts, Node* next):item(itm), counts(cnts), next_item(next){}
     friend ostream &operator<<(ostream &os, const Node& node){
         return os << "item = " << node.item << " counts = " << node.counts ;
     }
@@ -33,6 +34,8 @@ private:
     double min_support;
 
     vector<Node>header_table;
+    Node* record_header_link[1000];
+
     Node* root;
 
 public:
@@ -40,11 +43,21 @@ public:
     FPTree(double min_sp):min_support(min_sp){}
     ~FPTree(){}
 
+    void save_file(char* output_file){
+
+    }
+
     void build_tree(){
        // Build header table
+        for(int i=0;i<1000;i++){
+            record_header_link[i] = new Node(-1, -1);
+        }
+
        for(int i=0;i<transaction_list[0].size();i++){
-           header_table.push_back( Node(transaction_list[0][i], number_counts[transaction_list[0][i]]) );
+           header_table.push_back( Node(transaction_list[0][i], number_counts[transaction_list[0][i]], record_header_link[transaction_list[0][i]]) );
        }
+
+       // Plot header table
        /*
        for(int i=0;i<header_table.size();i++){
            cout << header_table[i] << endl;
@@ -52,11 +65,87 @@ public:
 
         root = new Node(-1, 0);
 
+
         // Build fp tree
         for(int i=1;i<=transaction_list_length;i++){
-            
+            insert(transaction_list[i]);
         }
 
+        /*
+       for(int i=0;i<header_table.size();i++){
+           cout << header_table[i] << endl;
+       }*/
+
+        //Plot Tree
+        //plot(root);
+
+        // link header Table to fp tree
+        for(int i=0;i<header_table.size();i++){
+            header_table[i].next_item = header_table[i].next_item->next_item;
+        }
+
+        // plot header table link
+        /*
+        for(int i=0;i<header_table.size();i++){
+            Node* tmp = header_table[i].next_item;
+            while(tmp){
+                cout << *tmp << " || ";
+                tmp = tmp->next_item;
+            }
+            cout << endl;
+        }*/
+
+    }
+    void plot(Node * node){
+        for(int i=0;i<node->children.size();i++){
+            cout << *node->children[i] << "||";
+            plot(node->children[i] );
+            cout << endl;
+        }
+    }
+
+    void insert(std::vector<int> transaction){
+        Node* now_node = root;
+        int index, item;
+        int i = 0;
+        bool alreadat_not_found = false;
+        while( i<transaction.size() ){
+            item = transaction[i];
+            if(alreadat_not_found){
+                now_node -> children.push_back(new Node(item, 1));
+
+                record_header_link[item]->next_item = now_node -> children.back();
+                now_node = now_node -> children.back();
+                record_header_link[item] = now_node;
+            }
+            else{  
+                index = find_item(now_node->children, item);
+                // Not found
+                if(index == -1){
+                    alreadat_not_found = true;
+                    now_node -> children.push_back(new Node(item, 1));
+
+                    record_header_link[item]->next_item = now_node -> children.back();
+                    now_node = now_node -> children.back();
+                    record_header_link[item] = now_node;
+                }
+                else{
+                    now_node = now_node->children[index];
+                    now_node->counts += 1;
+                   
+                }
+            }
+             i++;
+        }
+    }
+
+    int find_item(vector<Node*> children, int target_item){
+        for(int i=0;i<children.size();i++){
+            if(children[i]->item == target_item){
+                return i;
+            }
+        }
+        return -1;
     }
 
     void read_file(char* input_file){
@@ -100,6 +189,7 @@ public:
                 transaction_list[i].pop_back();
             }
             
+            // print all lines after sort
             /*
             cout << "index = " << i << " = ";
             for(int g=0;g<transaction_list[i].size();g++){
@@ -128,7 +218,17 @@ public:
         int n=0, num_1_index=0, num_2_index=0;
         while(n<num_1.size()+num_2.size()){
             if(num_1_index < num_1.size() && num_2_index < num_2.size()){
-                if( number_counts[ num_1[num_1_index] ] <= number_counts[ num_2[num_2_index] ]){
+                if( number_counts[ num_1[num_1_index] ] == number_counts[ num_2[num_2_index] ]){
+                    if(num_1[num_1_index] < num_2[num_2_index]){
+                        result.push_back(num_2[num_2_index]);
+                        num_2_index++;                        
+                    }
+                    else{
+                        result.push_back(num_1[num_1_index]);
+                        num_1_index++;  
+                    }
+                }
+                else if( number_counts[ num_1[num_1_index] ] < number_counts[ num_2[num_2_index] ]){
                     result.push_back(num_2[num_2_index]);
                     num_2_index++;
                 }
@@ -175,11 +275,14 @@ int main(int argc, char* argv[]){
     char* input_file = argv[2];
     char* output_file = argv[3];
 
+    // Build FP Tree
     FPTree fptree(min_support);
     fptree.read_file(input_file);
     fptree.preprocess_transaction_list();
     fptree.build_tree();
     
+    // Find all combination and save file
+    fptree.save_file();
     
     cout << "time taken = "<< (clock()-t_start)/CLOCKS_PER_SEC << endl;
     return 0;
