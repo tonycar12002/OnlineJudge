@@ -6,14 +6,19 @@
 #include <time.h>
 #include <fstream>
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <set>
 
 using namespace std;
 class Node{
 public:
     int item;
     int counts;
-    Node* next_item = NULL;
+    Node* next_item = NULL; 
     vector<Node*> children;
+    Node* parent = NULL;
 
     Node():counts(0), item(-1){}
     Node(int itm):item(itm), counts(0){}
@@ -43,8 +48,11 @@ public:
     FPTree(double min_sp):min_support(min_sp){}
     ~FPTree(){}
 
-    void save_file(char* output_file){
+    void fp_growth(){
 
+    }
+    void save_file(char* output_file){
+       
     }
 
     void build_tree(){
@@ -69,6 +77,8 @@ public:
         // Build fp tree
         for(int i=1;i<=transaction_list_length;i++){
             insert(transaction_list[i]);
+            transaction_list[i].clear();
+            transaction_list[i].shrink_to_fit();
         }
 
         /*
@@ -76,31 +86,33 @@ public:
            cout << header_table[i] << endl;
        }*/
 
-        //Plot Tree
-        //plot(root);
+        
 
         // link header Table to fp tree
         for(int i=0;i<header_table.size();i++){
             header_table[i].next_item = header_table[i].next_item->next_item;
         }
 
-        // plot header table link
-        /*
-        for(int i=0;i<header_table.size();i++){
-            Node* tmp = header_table[i].next_item;
-            while(tmp){
-                cout << *tmp << " || ";
-                tmp = tmp->next_item;
-            }
-            cout << endl;
-        }*/
+        //Plot Tree by header table
+        //plot_tree();
+
+
 
     }
-    void plot(Node * node){
-        for(int i=0;i<node->children.size();i++){
-            cout << *node->children[i] << "||";
-            plot(node->children[i] );
-            cout << endl;
+    void plot_tree(){
+        for(int i=0;i<header_table.size();i++){
+            Node* node = header_table[i].next_item;
+            Node* trace = header_table[i].next_item;
+            while(node){
+                trace = node;
+                while(trace->parent){
+                    cout << *trace << " | ";
+                    trace = trace->parent;
+                }
+                cout << endl;
+                node = node->next_item;
+            }
+            
         }
     }
 
@@ -108,13 +120,15 @@ public:
         Node* now_node = root;
         int index, item;
         int i = 0;
-        bool alreadat_not_found = false;
+        bool already_not_found = false;
         while( i<transaction.size() ){
             item = transaction[i];
-            if(alreadat_not_found){
+            if(already_not_found){
                 now_node -> children.push_back(new Node(item, 1));
 
                 record_header_link[item]->next_item = now_node -> children.back();
+
+                now_node->children.back()->parent = now_node;
                 now_node = now_node -> children.back();
                 record_header_link[item] = now_node;
             }
@@ -122,10 +136,12 @@ public:
                 index = find_item(now_node->children, item);
                 // Not found
                 if(index == -1){
-                    alreadat_not_found = true;
+                    already_not_found = true;
                     now_node -> children.push_back(new Node(item, 1));
 
                     record_header_link[item]->next_item = now_node -> children.back();
+
+                    now_node->children.back()->parent = now_node;
                     now_node = now_node -> children.back();
                     record_header_link[item] = now_node;
                 }
@@ -282,7 +298,7 @@ int main(int argc, char* argv[]){
     fptree.build_tree();
     
     // Find all combination and save file
-    fptree.save_file();
+    fptree.save_file(output_file);
     
     cout << "time taken = "<< (clock()-t_start)/CLOCKS_PER_SEC << endl;
     return 0;
