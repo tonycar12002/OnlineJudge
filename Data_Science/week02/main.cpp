@@ -12,25 +12,23 @@
 #include <set>
 #include <thread>
 #include <mutex>
-
+#include <memory>
 using namespace std;
-
-
 
 class Node{
 public:
     short int item;
     int counts;
-    Node* next_item = NULL; 
-    vector<Node*> children;
-    Node* parent = NULL;
+    shared_ptr<Node> next_item = NULL; 
+    vector< shared_ptr<Node> > children;
+    shared_ptr<Node> parent = NULL;
     short int height;
 
     Node():counts(0), item(-1){}
     Node(short int itm):item(itm), counts(0), height(0){}
     Node(short int itm, int cnts):item(itm), counts(cnts), height(0){}
     Node(short int itm, int cnts, short int height):item(itm), counts(cnts), height(height){}
-    Node(short int itm, int cnts, Node* next):item(itm), counts(cnts), next_item(next){}
+    Node(short int itm, int cnts, shared_ptr<Node> next):item(itm), counts(cnts), next_item(next){}
     friend ostream &operator<<(ostream&, const Node&);
     ~Node(){}
 
@@ -46,10 +44,10 @@ private:
     double min_support;
     int thread_num;
 
-    vector<Node>header_table;
-    Node* record_header_link[1000];
+    vector< Node >header_table;
+    vector<shared_ptr<Node> > record_header_link;
 
-    Node* root;
+    shared_ptr<Node> root;
 
 public:
     FPTree(){}
@@ -71,7 +69,8 @@ public:
 
        // Build header table
         for(short int i=0;i<1000;i++){
-            record_header_link[i] = new Node(-1, -1);
+            shared_ptr<Node> node(new Node(-1, -1));
+            record_header_link.push_back(node);
         }
 
        for(short int i=0;i<transaction_list[0].size();i++){
@@ -84,11 +83,11 @@ public:
            cout << header_table[i] << endl;
        }*/
 
-        root = new Node(-1, 0);
+        root = make_shared<Node>(-1, 0);
 
         // Build fp tree
         
-        for(int i=1;i<=200000;i++){
+        for(int i=1;i<=transaction_list_length;i++){
             insert(transaction_list[i]);
             transaction_list[i].clear();
             transaction_list[i].shrink_to_fit();
@@ -105,15 +104,15 @@ public:
         }
 
         //Plot Tree by header table
-        plot_tree();
+        //plot_tree();
 
     }
     void plot_tree(){
         ofstream  outfile("plot_tree.txt");
         double x = 0.0;
         for(short int i=0;i<header_table.size();i++){
-            Node* node = header_table[i].next_item;
-            Node* trace = header_table[i].next_item;
+            shared_ptr<Node> node = header_table[i].next_item;
+            shared_ptr<Node> trace = header_table[i].next_item;
             while(node){
                 if(node->children.size() == 0){
                     trace = node;
@@ -132,7 +131,7 @@ public:
     }
 
     void insert(std::vector<short int> transaction){
-        Node* now_node = root;
+        shared_ptr<Node> now_node = root;
         short int index;
         short int i = 0, item;
         bool already_not_found = false;
@@ -140,7 +139,7 @@ public:
         while( i<transaction.size() ){
             item = transaction[i];
             if(already_not_found){
-                now_node -> children.push_back(new Node(item, 1, now_node->height+1));
+                now_node -> children.push_back( make_shared<Node>((item, 1, now_node->height+1)) );
 
                 record_header_link[item]->next_item = now_node -> children.back();
 
@@ -153,7 +152,7 @@ public:
                 // Not found
                 if(index == -1){
                     already_not_found = true;
-                    now_node -> children.push_back(new Node(item, 1, now_node->height+1));
+                    now_node -> children.push_back(  make_shared<Node>((item, 1, now_node->height+1)) );
 
                     record_header_link[item]->next_item = now_node -> children.back();
 
@@ -171,7 +170,7 @@ public:
         }
     }
 
-    short int find_item(vector<Node*> children, short int target_item){
+    short int find_item(vector< shared_ptr<Node> > children, short int target_item){
         /* 
         ==========================================================
             Find the position of target number in vector
