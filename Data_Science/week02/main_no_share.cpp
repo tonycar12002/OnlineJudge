@@ -10,26 +10,27 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <set>
-#include <pthread.h>
 #include <thread>
 #include <mutex>
-#include <memory>
+
 using namespace std;
+
+
 
 class Node{
 public:
     short int item;
     int counts;
-    shared_ptr<Node> next_item = NULL; 
-    vector< shared_ptr<Node> > children;
-    shared_ptr<Node> parent = NULL;
+    Node* next_item = NULL; 
+    vector<Node*> children;
+    Node* parent = NULL;
     short int height;
 
     Node():counts(0), item(-1){}
     Node(short int itm):item(itm), counts(0), height(0){}
     Node(short int itm, int cnts):item(itm), counts(cnts), height(0){}
     Node(short int itm, int cnts, short int height):item(itm), counts(cnts), height(height){}
-    Node(short int itm, int cnts, shared_ptr<Node> next):item(itm), counts(cnts), next_item(next){}
+    Node(short int itm, int cnts, Node* next):item(itm), counts(cnts), next_item(next){}
     friend ostream &operator<<(ostream&, const Node&);
     ~Node(){}
 
@@ -37,30 +38,58 @@ public:
 ostream &operator<<(ostream &os, const Node& node){
     return os << "item = " << node.item << " counts = " << node.counts << " height = " << node.height ;
 }   
+struct SetRecord{
+    set<int> combination_set;
+    int counts = 0;
+    SetRecord* next = NULL;
+};
 class FPTree{
 private:
     vector < vector<short int> > transaction_list;
     int number_counts[1000];
     int transaction_list_length;
     double min_support;
-    int thread_num;
+    int thread_num; 
 
-    vector< Node >header_table;
-    vector<shared_ptr<Node> > record_header_link;
+    vector<Node>header_table;
+    Node* record_header_link[1000];
+    short int max_height = -1;
 
-    shared_ptr<Node> root;
+    Node* root;
+
+    static const int mod = 51245, multi = 32;
+    SetRecord set_hash_table[mod]; 
 
 public:
     FPTree(){}
     FPTree(double min_sp):min_support(min_sp){}
     ~FPTree(){}
+    
+    void fp_subtree(Node* start_node, int target_height){
+        set<int> combination_set;
+        while(start_node){
+            combination_set = fp_growth(start_node, combination_set, target_height);
 
-    void fp_growth(){
+            start_node = start_node->next_item;
+        }
+    }
+
+     set<int> fp_growth(Node* node, set<int> combination_set, int target_size){
 
     }
+
     void save_file(char* output_file){
-       
+        for(short int g = 1 ; g<= max_height; g++){
+            for(short int i=header_table.size()-1 ; i>=0 ;i--){
+                if (header_table[i].next_item){
+                    fp_subtree(header_table[i].next_item, g);
+                }
+            }
+        }
     }
+    
+
+
     void build_tree(){
         /* 
         ==========================================================
@@ -70,24 +99,33 @@ public:
 
        // Build header table
         for(short int i=0;i<1000;i++){
-            shared_ptr<Node> node(new Node(-1, -1));
-            record_header_link.push_back(node);
+            record_header_link[i] = new Node(-1, -1);
         }
+
        for(short int i=0;i<transaction_list[0].size();i++){
            header_table.push_back( Node(transaction_list[0][i], number_counts[transaction_list[0][i]], record_header_link[transaction_list[0][i]]) );
        }
+
        // Plot header table
        /*
        for(int i=0;i<header_table.size();i++){
            cout << header_table[i] << endl;
        }*/
-        root = make_shared<Node>(-1, 0);
-        // Build fp tree
-        
+
+        root = new Node(-1, -1);
+
+        /*        
+        ofstream  outfile("plot_tree.txt");
         for(int i=1;i<=transaction_list_length;i++){
-            if(i%500 == 0){
-                cout << i << endl;
+            for(int g=0;g<transaction_list[i].size();g++){
+                outfile << transaction_list[i][g] << " ";
             }
+            outfile << endl;
+        }
+        */
+
+        // Build fp tree
+        for(int i=1;i<=transaction_list_length;i++){
             insert(transaction_list[i]);
             transaction_list[i].clear();
             transaction_list[i].shrink_to_fit();
@@ -107,17 +145,18 @@ public:
         plot_tree();
 
     }
+
     void plot_tree(){
         ofstream  outfile("plot_tree.txt");
         double x = 0.0;
         for(short int i=0;i<header_table.size();i++){
-            shared_ptr<Node> node = header_table[i].next_item;
-            shared_ptr<Node> trace = header_table[i].next_item;
+            Node* node = header_table[i].next_item;
+            Node* trace = header_table[i].next_item;
             while(node){
                 if(node->children.size() == 0){
                     trace = node;
                     while(trace->parent){
-                        outfile << *trace << " | ";
+                        outfile << trace->item << " | ";
                         //x+= (double)sizeof(Node) * (double)trace->children.size()/1024/1024;
                         trace = trace->parent;
                     }
@@ -130,17 +169,24 @@ public:
         }
     }
 
+    short int max(short int a, short int b){
+        if (a>=b)
+            return a;
+        else 
+            return b;
+    }
     void insert(std::vector<short int> transaction){
-        shared_ptr<Node> now_node = root;
+        Node* now_node = root;
         short int index;
-        short int i = 0, item;
+        short int i = 0, item = -1;
         bool already_not_found = false;
 
         while( i<transaction.size() ){
             item = transaction[i];
+            //cout << item  << " "; 
             if(already_not_found){
-                now_node -> children.push_back( make_shared<Node>((item, 1, now_node->height+1)) );
-
+                now_node -> children.push_back(new Node(item, 1, now_node->height+1));
+                max_height = max(max_height, now_node->height+1);
                 record_header_link[item]->next_item = now_node -> children.back();
 
                 now_node->children.back()->parent = now_node;
@@ -152,7 +198,8 @@ public:
                 // Not found
                 if(index == -1){
                     already_not_found = true;
-                    now_node -> children.push_back(  make_shared<Node>((item, 1, now_node->height+1)) );
+                    now_node -> children.push_back(new Node(item, 1, now_node->height+1));
+                    max_height = max(max_height, now_node->height+1);
 
                     record_header_link[item]->next_item = now_node -> children.back();
 
@@ -168,9 +215,10 @@ public:
             }
              i++;
         }
+        //cout << endl;
     }
 
-    short int find_item(vector< shared_ptr<Node> > children, short int target_item){
+    short int find_item(vector<Node*> children, short int target_item){
         /* 
         ==========================================================
             Find the position of target number in vector
@@ -216,14 +264,17 @@ public:
                 }
                 else{
                     transaction.push_back(num);
-                     number_counts[num] ++;
+                    number_counts[num] ++;
+                    //cout << num << endl;
                     num = 0;
                 }
             }
+            //cout << num << "==="<< endl;
             if(num!=0){
                 transaction.push_back(num);
                 number_counts[num] ++;
             }
+            
             /* much slower
             istringstream ssline(input_string);
             while(getline(ssline, number_string, ',')){
@@ -240,6 +291,7 @@ public:
     void sort_multi_thread(int now_thread){
         
         for (int i = now_thread ; i<= transaction_list_length ; i+=thread_num){
+            //cout << i << endl;
             transaction_list[i] = merge_sort(transaction_list[i]);
             short int end = transaction_list[i].size()-1;
             while( end >=0 && (double)number_counts[ transaction_list[i][end] ]/transaction_list_length < min_support){
@@ -249,7 +301,6 @@ public:
         }   
         return;
     }
-
     void preprocess_transaction_list(){
         /* 
         ==========================================================
@@ -258,10 +309,10 @@ public:
         ==========================================================
         */
 
-        //thread_num = std::thread::hardware_concurrency()-1;
-        thread_num = 7;
-
+        
+        thread_num = std::thread::hardware_concurrency()-1;
         thread *t = new thread [thread_num];
+
         for(int i=0;i<thread_num;i++){
             t[i] = thread(&FPTree::sort_multi_thread, this, i);
         }
@@ -274,7 +325,6 @@ public:
         for (int i = 0 ; i<= transaction_list_length ; i+=1){
             //cout << i << endl;
             transaction_list[i] = merge_sort(transaction_list[i]);
-
             short int end = transaction_list[i].size()-1;
             while( end >=0 && (double)number_counts[ transaction_list[i][end] ]/transaction_list_length < min_support){
                 end --;
@@ -282,10 +332,8 @@ public:
             }
         } */  
 
-
-
         // print all lines to txt
-        /*
+        
         ofstream outfile("sort_multi.txt");
         for (int i = 0 ; i<= transaction_list_length ; i++){
             outfile << "index = " << i << " = ";
@@ -293,7 +341,7 @@ public:
                 outfile << transaction_list[i][g] << " " ;
             }
             outfile <<endl;
-        }*/
+        }
         
 
         /*
