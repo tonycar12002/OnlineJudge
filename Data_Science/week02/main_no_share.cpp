@@ -46,7 +46,7 @@ struct SetRecord{
 class FPTree{
 private:
     vector < vector<short int> > transaction_list;
-    int number_counts[1000];
+    static int number_counts[1000];
     int transaction_list_length;
     double min_support;
     int thread_num; 
@@ -142,7 +142,7 @@ public:
         }
 
         //Plot Tree by header table
-        plot_tree();
+        //plot_tree();
 
     }
 
@@ -194,7 +194,13 @@ public:
                 record_header_link[item] = now_node;
             }
             else{  
-                index = find_item(now_node->children, item);
+                
+                //index = find_item(now_node->children, item);
+                index = -1;
+                if (now_node->children.size()!=0 && now_node->children.back()->item == item){
+                    index = now_node->children.size()-1;
+                }   
+        
                 // Not found
                 if(index == -1){
                     already_not_found = true;
@@ -301,6 +307,30 @@ public:
         }   
         return;
     }
+
+    static bool transaction_compare(const vector<short int>& a, const vector<short int>& b){
+        int i = 0;
+        while(i < a.size() && i < b.size() ){
+            if(number_counts[a[i]] > number_counts[b[i]])
+                return true;
+            else if ( number_counts[a[i]] < number_counts[b[i]] )
+                return false;
+            else if ( number_counts[a[i]] == number_counts[b[i]] ){
+                if( a[i] > b[i]){
+                    return true;
+                }
+                else if (a[i] < b[i])
+                    return false;
+                else
+                    i++;
+            }
+        }
+        if(a.size() >= b.size())
+            return false;
+        else
+            return true;
+    }
+
     void preprocess_transaction_list(){
         /* 
         ==========================================================
@@ -332,8 +362,10 @@ public:
             }
         } */  
 
+        std::sort(transaction_list.begin()+1, transaction_list.end(), transaction_compare);
+
         // print all lines to txt
-        
+        /*
         ofstream outfile("sort_multi.txt");
         for (int i = 0 ; i<= transaction_list_length ; i++){
             outfile << "index = " << i << " = ";
@@ -341,7 +373,7 @@ public:
                 outfile << transaction_list[i][g] << " " ;
             }
             outfile <<endl;
-        }
+        }*/
         
 
         /*
@@ -418,7 +450,7 @@ public:
 
 
 };
-
+int FPTree::number_counts[1000]={0};
 int main(int argc, char* argv[]){
     clock_t t_start = clock();
 
@@ -434,7 +466,9 @@ int main(int argc, char* argv[]){
     cout << "Sort done" << endl;
     fptree.build_tree();
     cout << "Build fp tree done" << endl;
-    
+    //fptree.save_file(output_file);
+    cout << "Save file done" << endl;
+
     // Find all combination and save file
     //fptree.save_file(output_file);
     
