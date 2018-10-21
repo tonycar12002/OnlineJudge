@@ -14,6 +14,7 @@
 #include <mutex>
 #include <map>
 #include <list>
+#include <iomanip>
 using namespace std;
 class Node{
 public:
@@ -55,8 +56,14 @@ struct compBySet{
         }
     }
 };
+
 map<set<short int>, int, compBySet>all_combination;
 map<set<short int>, int>::iterator iter;
+
+int thread_num = std::thread::hardware_concurrency()-1;
+thread *t = new thread [thread_num];
+mutex gMutex;
+
 int nme = 0;
 class FPTree{
 public:
@@ -64,7 +71,6 @@ public:
     static int number_counts[1000];
     int transaction_list_length;
     double min_support_line;
-    int thread_num; 
 
     vector<Node>header_table;
     Node* record_header_link[1000];
@@ -81,21 +87,39 @@ public:
     void fpGrowth(Node* node, set<short int> combination_set, int num){
         if (!node)
             return;
+        //gMutex.lock();
         combination_set.insert(node->item);
         all_combination[combination_set] += num;
+        //gMutex.unlock();
         
         while(node->parent->item != -1){
             fpGrowth(node->parent, combination_set, num);
             node = node->parent;
         }
+        
     }
+    
 
+    void condTreeMultiThread(Node* condition_node, FPTree* subtree){
+        Node* tmp = condition_node->parent;
+        int c = condition_node->counts;
+        while(c--){
+            vector<short int> transaction;
+            tmp = condition_node->parent;
+            while(tmp->parent){
+                transaction.push_back(tmp->item);
+                subtree->number_counts[tmp->item] += 1;
+                tmp = tmp ->parent;
+            }
+            subtree->transaction_list.push_back(transaction);
+        }
+    }
 
     void conditionPattern(Node* condition_node){
         // Create pattern conditional tree
         FPTree subtree(min_support_line, base_combination);
-        bool tree_done = false;
-        
+        bool tree_done = false;     
+
         // Add Header Table Line
         vector<short int> first_line;
         for(short int i=0;i<=999;i++){
@@ -103,15 +127,15 @@ public:
             first_line.push_back(i);
         }
         subtree.transaction_list.push_back(first_line);
-
-        
         subtree.base_combination.insert(condition_node->item);
 
+        int g=0;
         while(condition_node){
             all_combination[subtree.base_combination] += condition_node -> counts;
+            t[g] = thread(subtree.condTreeMultiThread, this, condition_node, &subtree);
+            /*
             Node* tmp = condition_node->parent;
             int c = condition_node->counts;
-
             while(c--){
                 vector<short int> transaction;
                 tmp = condition_node->parent;
@@ -121,56 +145,42 @@ public:
                     tmp = tmp ->parent;
                 }
                 subtree.transaction_list.push_back(transaction);
-            }
+            } */
             condition_node = condition_node->next_item;
+           
+            g++;
+            if(g == thread_num){
+                for(int q=0;q<g;q++)
+                    t[q].join();
+                g= 0;
+            }
         }
-        
+        for(int q=0;q<g;q++)
+            t[q].join();
+        //cout << subtree.transaction_list.size() - 1 << endl;
         subtree.transaction_list_length = subtree.transaction_list.size() - 1;
-
         subtree.preprocessTransactionList();
         subtree.buildTree();
-
-        //string name = to_string(  nme++ );
-        //subtree.plotTree(name);
-
-        if(subtree.checkTreeBranch(subtree.root) == 1){
-            clock_t t_start = clock();
-            
-            set<short int>combination_set = subtree.base_combination;
-
-            for(short int i=subtree.header_table.size()-1 ; i>=0 ;i--){
-                if(subtree.header_table[i].next_item){
-                    fpGrowth(subtree.header_table[i].next_item, combination_set, subtree.header_table[i].next_item->counts);
-                }
-            }
-
-            //cout << "mining time taken = "<< (double)(clock()-t_start)/(double)CLOCKS_PER_SEC << endl;
-        }
-        else{
-            subtree.mineTree();
-        }
+        subtree.mineTree();
         deleteNode(subtree.root);
     }
 
-    int checkTreeBranch(Node* node){
-        while(node->children.size() > 0){
-            if(node->children.size() > 1){
-                return 0;
-            }
-            node = node->children[0];
-        }
-        return 1;
-    }
     void mineTree(){
         // run all header table link to create subtree
+        vector<short int> need_condition_pattern;
         for(short int i=header_table.size()-1 ; i>=0 ;i-= 1){
             if (header_table[i].next_item){
-                conditionPattern(header_table[i].next_item);
+                if(header_table[i].next_item->next_item)
+                    conditionPattern(header_table[i].next_item); 
+                else{
+                    fpGrowth(header_table[i].next_item, base_combination, header_table[i].next_item->counts);
+                }
             }
-        }
+        }  
     }
     void saveFIle(char* output_file){ 
         ofstream  outfile(output_file);
+        outfile.setf(ios::showpoint); 
         for(auto  it = all_combination.begin(); it != all_combination.end(); ++it)
         {
             for (short int const& i : it->first){
@@ -179,8 +189,12 @@ public:
                 else
                     outfile <<","<< i ;
             }
-            int c = (double)it->second/transaction_list_length*1000;
-            outfile << ":" << (double)c/1000<< endl;
+            int c = (double)it->second/transaction_list_length * 100000;
+            if( c % 10 > 5)
+                c = c /10 + 1;
+            else
+                c = c/10;
+            outfile << ":" << setprecision(4) << (double)c/10000 << endl;
         }
     }
     
@@ -394,6 +408,7 @@ public:
             transaction_list.push_back(transaction);
         }
         transaction_list_length = transaction_list.size() - 1;
+
         min_support_line = (double)transaction_list_length * min_sup;
     }
 
@@ -442,9 +457,6 @@ public:
         ==========================================================
         */
 
-        thread_num = std::thread::hardware_concurrency()-1;
-        thread *t = new thread [thread_num];
-        
         for(int i=0;i<thread_num;i++){
             t[i] = thread(&FPTree::sortMultiThread, this, i);
         }
@@ -560,6 +572,7 @@ int main(int argc, char* argv[]){
     double min_support = atof(argv[1]);
     char* input_file = argv[2];
     char* output_file = argv[3];
+
 
     // Build FP Tree
     FPTree fptree;
