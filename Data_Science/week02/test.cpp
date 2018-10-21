@@ -3,37 +3,23 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <set>
 using namespace std;
 class A{
 public:
-    vector<A*>child;
+    static int a;
+    int b;
+    A(){a=5;b=3;}
 
+    void out(){
+        cout << &a << " " << &b << endl;
+    }
 };
-int main(){
-    A a, b;
-    a.child.push_back(&b);
-    a.child.push_back(&b);
-    a.child.push_back(&b);
-    a.child.push_back(&b);
-    a.child.push_back(&b);
-    a.child.push_back(&b);
-    a.child.push_back(&b);
-    b.child.push_back(&a);
-    b.child.push_back(&a);
-    b.child.push_back(&a);
-    b.child.push_back(&a);
-    b.child.push_back(&a);
-    b.child.push_back(&a);
-    b.child.push_back(&a);
-    b.child.push_back(&a);
-    //cout << sizeof(A) << endl;
-    //cout << a.child.capacity()  << endl;
-    //cout << sizeof(A) * a.child.capacity() << endl;;
+int A::a = 5;
+int main() {
+    int c = 9;
+    while(c--){
+        cout << c <<endl;
+    }
 
-    vector<int>test;
-    cout << sizeof(test) <<endl;
-
-    queue<int> que;
-    cout << sizeof(que) << endl;
-    return 0;
 }
