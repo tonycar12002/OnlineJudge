@@ -13,12 +13,12 @@ bool contain(vector<int>random, int target){
     return false;
 }
 int main(){
-    ofstream  outfile("sample3.in");
+    ofstream  outfile("sample5.in");
 
     srand(time(NULL));
-    int line = 200000;
-    int item_range = 150;
-    int each_line = 50;
+    int line = 10;
+    int item_range = 15;
+    int each_line = 5;
     vector<int> random_num;
     random_num.resize(each_line);
     for(int i = 0 ; i<line ; i++){
