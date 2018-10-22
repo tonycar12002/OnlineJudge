@@ -100,18 +100,21 @@ public:
     }
     
 
-    void condTreeMultiThread(Node* condition_node, FPTree* subtree){
+    void condTreeMultiThread(Node* condition_node, FPTree* subtree, int start){
+        
         Node* tmp = condition_node->parent;
         int c = condition_node->counts;
+        vector<short int> transaction;
+        tmp = condition_node->parent;
+        while(tmp->parent){
+            transaction.push_back(tmp->item);
+            subtree->number_counts[tmp->item] += c;
+            tmp = tmp ->parent;
+        }
         while(c--){
-            vector<short int> transaction;
-            tmp = condition_node->parent;
-            while(tmp->parent){
-                transaction.push_back(tmp->item);
-                subtree->number_counts[tmp->item] += 1;
-                tmp = tmp ->parent;
-            }
-            subtree->transaction_list.push_back(transaction);
+            //gMutex.lock();
+            subtree->transaction_list[start+c] = transaction;
+            //gMutex.unlock();
         }
     }
 
@@ -130,39 +133,54 @@ public:
         subtree.base_combination.insert(condition_node->item);
 
         int g=0;
+        /*
+        int start = 1;
+        subtree.transaction_list.resize(transaction_list_length+1);
+        */
+
         while(condition_node){
-            all_combination[subtree.base_combination] += condition_node -> counts;
-            t[g] = thread(subtree.condTreeMultiThread, this, condition_node, &subtree);
-            /*
-            Node* tmp = condition_node->parent;
             int c = condition_node->counts;
+            all_combination[subtree.base_combination] += c;
+
+            Node* tmp = condition_node->parent;
+            vector<short int> transaction;
+            tmp = condition_node->parent;
+            while(tmp->parent){
+                transaction.push_back(tmp->item);
+                subtree.number_counts[tmp->item] += c;
+                tmp = tmp ->parent;
+            }
             while(c--){
-                vector<short int> transaction;
-                tmp = condition_node->parent;
-                while(tmp->parent){
-                    transaction.push_back(tmp->item);
-                    subtree.number_counts[tmp->item] += 1;
-                    tmp = tmp ->parent;
-                }
                 subtree.transaction_list.push_back(transaction);
-            } */
-            condition_node = condition_node->next_item;
-           
+            }
+
+            /*
+            t[g] = thread(&FPTree::condTreeMultiThread, this, condition_node, &subtree, start);
+            start += c;
             g++;
             if(g == thread_num){
                 for(int q=0;q<g;q++)
                     t[q].join();
-                g= 0;
-            }
+                g = 0;
+            }*/
+
+            condition_node = condition_node->next_item;
         }
+        /*
         for(int q=0;q<g;q++)
             t[q].join();
-        //cout << subtree.transaction_list.size() - 1 << endl;
+            subtree.transaction_list.resize(start);
+        */
+
         subtree.transaction_list_length = subtree.transaction_list.size() - 1;
+
+        //subtree.plotTree(to_string(nme++) );
+
         subtree.preprocessTransactionList();
         subtree.buildTree();
         subtree.mineTree();
         deleteNode(subtree.root);
+
     }
 
     void mineTree(){
@@ -189,12 +207,13 @@ public:
                 else
                     outfile <<","<< i ;
             }
-            int c = (double)it->second/transaction_list_length * 100000;
-            if( c % 10 > 5)
-                c = c /10 + 1;
+            int c = (double)it->second/transaction_list_length * 1000000;
+            if( c % 100 >= 45)
+                c = c /100 + 1;
             else
-                c = c/10;
-            outfile << ":" << setprecision(4) << (double)c/10000 << endl;
+                c = c/100;
+            double d = (double)c/10000;
+            outfile << fixed <<  setprecision(4) << ":"  << d << endl;
         }
     }
     
@@ -392,7 +411,7 @@ public:
                 }
             }
             //cout << num << "==="<< endl;
-            if(num!=0){
+            if(num!=0 || transaction.size()== 0){
                 transaction.push_back(num);
                 number_counts[num] ++;
             }

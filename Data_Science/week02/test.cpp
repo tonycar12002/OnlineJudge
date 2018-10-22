@@ -4,22 +4,16 @@
 #include <vector>
 #include <queue>
 #include <set>
+#include <iomanip>
 using namespace std;
-class A{
-public:
-    static int a;
-    int b;
-    A(){a=5;b=3;}
-
-    void out(){
-        cout << &a << " " << &b << endl;
-    }
-};
-int A::a = 5;
 int main() {
-    int c = 9;
-    while(c--){
-        cout << c <<endl;
-    }
+    int c = 0.147449* 1000000;
+    if( c % 100 >= 45)
+        c = c /100 + 1;
+    else
+        c = c/100;
+    double d = (double)c/10000;
+    cout << fixed <<  setprecision(4) << ":"  << d << endl;
+
 
 }
