@@ -4,4 +4,6 @@
 test
 .ipynb_checkpoints
 *.vs
-Data_Science/week02/0660050_HW2_final.zip
+*.zip
+*.rar
+
