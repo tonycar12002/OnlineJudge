@@ -13,3 +13,7 @@ reference: https://medium.com/@ken90242/machine-learning%E5%AD%B8%E7%BF%92%E6%97
 * week 03
     * Logistic Regression
     * Regularization
+* week 04
+	* Motivations
+	* Neural Networks
+	* Applications
