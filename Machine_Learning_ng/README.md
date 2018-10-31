@@ -3,17 +3,17 @@ website: https://www.coursera.org/learn/machine-learning/ </br>
 reference: https://medium.com/@ken90242/machine-learning%E5%AD%B8%E7%BF%92%E6%97%A5%E8%A8%98-coursera%E7%AF%87-%E6%A5%94%E5%AD%90-b4843f5d9e49 
 
 ## Contents
-* week 01
+* Week 01 - Introduction
     * Introduction
     * Linear Regression with One Variable
     * Linear Algebra Review
-* week 02
+* Week 02 - Linear Regression with Multiple Variables
     * Linear Regression with Multiple Variables
     * Octave/Matlab Tutorial
-* week 03
+* Week 03 - Logistic Regression
     * Logistic Regression
     * Regularization
-* week 04
+* Week 04 - Neural Networks: Representation
 	* Motivations
 	* Neural Networks
 	* Applications
