@@ -17,3 +17,7 @@ reference: https://medium.com/@ken90242/machine-learning%E5%AD%B8%E7%BF%92%E6%97
 	* Motivations
 	* Neural Networks
 	* Applications
+* Week 05 - Neural Networks: Learning
+	* Cost Function and Backpropagation
+	* Backpropagation in Practice
+	* Application of Neural Networks
