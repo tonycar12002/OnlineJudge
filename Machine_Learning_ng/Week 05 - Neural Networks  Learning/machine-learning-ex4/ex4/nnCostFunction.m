@@ -53,14 +53,14 @@ z2 = sigmoid(a2);
 
 yTrain = zeros(m_X, num_labels);
 for i = 1:m_X
-  yTrain(i, pred(i)) = 1;
+  yLabel(i, y(i)) = 1;
 endfor
-yTrain
-J = -1/m_X * (yTrain' * log(z2) + (1-yTrain)' * log(1-z2)) ;
-tmp = sum(sum(Theta1(2:end).^2)) + sum(sum(Theta2(2:end).^2));
-J = sum(sum(J));
-J = J + lambda/2/m_X * tmp;
 
+
+J = (yLabel .* log(z2) + (1-yLabel).* log(1-z2)) ;
+tmp = sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2));
+J = -1/m_X * sum(sum(J));
+J = J + lambda/2/m_X * tmp;
 
 
 % Part 2: Implement the backpropagation algorithm to compute the gradients
@@ -77,7 +77,11 @@ J = J + lambda/2/m_X * tmp;
 %         Hint: We recommend implementing backpropagation using a for-loop
 %               over the training examples if you are implementing it for the 
 %               first time.
-%
+
+delta3 = z2 - yLabel;
+
+delta2 = Theta2' * delta3 .* sigmoidGradient(a1)
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
