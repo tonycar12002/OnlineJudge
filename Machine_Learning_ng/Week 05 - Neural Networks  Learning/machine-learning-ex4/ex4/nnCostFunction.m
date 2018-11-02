@@ -51,6 +51,17 @@ z2 = sigmoid(a2);
 
 [num, pred] = max(z2, [], 2);
 
+yTrain = zeros(m_X, num_labels);
+for i = 1:m_X
+  yTrain(i, pred(i)) = 1;
+endfor
+yTrain
+J = -1/m_X * (yTrain' * log(z2) + (1-yTrain)' * log(1-z2)) ;
+tmp = sum(sum(Theta1(2:end).^2)) + sum(sum(Theta2(2:end).^2));
+J = sum(sum(J));
+J = J + lambda/2/m_X * tmp;
+
+
 
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
