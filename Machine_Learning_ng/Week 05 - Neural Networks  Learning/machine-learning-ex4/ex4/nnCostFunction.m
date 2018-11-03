@@ -41,15 +41,15 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 X = [ones(m_X, 1), X];
-a1 = X * Theta1';
-z1 = sigmoid(a1);
+z2 = X * Theta1';
+a2 = sigmoid(z2);
 
-m_a1 = size(z1, 1);
-z1 = [ones(m_a1, 1), z1];
-a2 = z1 * Theta2';
-z2 = sigmoid(a2);
+m_a2 = size(a2, 1);
+a2 = [ones(m_a2, 1), a2];
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
 
-[num, pred] = max(z2, [], 2);
+[num, pred] = max(a3, [], 2);
 
 yTrain = zeros(m_X, num_labels);
 for i = 1:m_X
@@ -57,7 +57,7 @@ for i = 1:m_X
 endfor
 
 
-J = (yLabel .* log(z2) + (1-yLabel).* log(1-z2)) ;
+J = (yLabel .* log(a3) + (1-yLabel).* log(1-a3)) ;
 tmp = sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2));
 J = -1/m_X * sum(sum(J));
 J = J + lambda/2/m_X * tmp;
@@ -78,9 +78,12 @@ J = J + lambda/2/m_X * tmp;
 %               over the training examples if you are implementing it for the 
 %               first time.
 
-delta3 = z2 - yLabel;
+delta3 = a3 - yLabel;
 
-delta2 = Theta2' * delta3 .* sigmoidGradient(a1)
+delta2 = (delta3 * Theta2)(:,2:end) .* sigmoidGradient(z2);
+
+Theta2_grad = delta3' * a2 / m_X;
+Theta1_grad = delta2' * X / m_X;
 
 % Part 3: Implement regularization with the cost function and gradients.
 %
@@ -91,12 +94,15 @@ delta2 = Theta2' * delta3 .* sigmoidGradient(a1)
 %
 
 
+Theta1_lambda = lambda * Theta1/m_X;
+Theta1_lambda(:,1) = 0;
+
+Theta2_lambda = lambda * Theta2/m_X;
+Theta2_lambda(:,1) = 0;
 
 
-
-
-
-
+Theta2_grad = Theta2_grad + Theta2_lambda;
+Theta1_grad = Theta1_grad + Theta1_lambda;
 % -------------------------------------------------------------
 
 % =========================================================================
