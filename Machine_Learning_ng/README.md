@@ -13,12 +13,18 @@ reference: https://medium.com/@ken90242/machine-learning%E5%AD%B8%E7%BF%92%E6%97
 * Week 03 - Logistic Regression
     * Logistic Regression
     * Regularization
-* Week 04 - Neural Networks: Representation
+* Week 04 - Neural Networks Representation
 	* Motivations
 	* Neural Networks
 	* Applications
-* Week 05 - Neural Networks: Learning
+* Week 05 - Neural Networks Learning
 	* Cost Function and Backpropagation
 	* Backpropagation in Practice
 	* Application of Neural Networks
 	* [reference](http://cpmarkchang.logdown.com/posts/277349-neural-network-backward-propagation)
+* Week 06 - Advice for Applying Machine Learning
+	* Evaluating a Learning Algorithm
+	* Bias vs. Variance
+	* Building a Spam Classifier
+	* Handling Skewed Data
+	* Using Large Data Sets
