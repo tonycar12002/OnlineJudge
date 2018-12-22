@@ -12,7 +12,7 @@ website: https://www.coursera.org/learn/data-structures
 		* Heaps - Binary Tree
 		* Heap sort
 		* Binary Min-Heap
-		* [Binary Min-Heap](https://www.cs.usfca.edu/~galles/visualization/Heap.html)
+		* [Binary Min-Heap Visualization](https://www.cs.usfca.edu/~galles/visualization/Heap.html)
 	* Disjoint Sets
 		* Naive Implementations
 		* Efficient Implementations
