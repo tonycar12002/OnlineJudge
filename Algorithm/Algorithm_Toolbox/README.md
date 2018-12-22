@@ -23,6 +23,7 @@ website: https://www.coursera.org/learn/algorithmic-toolbox
     * Sorting
         * Quicksort
         * MergeSort
+        * [MergeSort Visualization](https://www.hackerearth.com/zh/practice/algorithms/sorting/merge-sort/visualize/)
         * SelectionSort
         * Non-Comparision Based Sort
     * Closest Pair
@@ -34,10 +35,12 @@ website: https://www.coursera.org/learn/algorithmic-toolbox
         * The Aligment Game
         * Edit Distance
         * Longest Common Subsequence
+        * [Longest Common Subsequence Visualization](https://www.cs.usfca.edu/~galles/visualization/DPLCS.html)
         * Reconstruct Aligment
 * Week 06 - Dynamic Programming II
     * Discrete KnapSack
         * KnapSack with Repetitions
+        * [KnapSack with Repetitions Visualization](https://www.cs.usfca.edu/~galles/visualization/DPChange.html)
         * KnapSack without Repetitions
     * Placing Parentheses
         * Min and Max Result
