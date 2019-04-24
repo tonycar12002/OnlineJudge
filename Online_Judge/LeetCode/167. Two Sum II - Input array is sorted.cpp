@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2018/05/28
 Topic: 167. Two Sum II - Input array is sorted
+Note: 找出兩數字相加為目標，陣列已排序，固頭尾開始找
 */
 class Solution {
 public:

@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2018/05/29
 Topic: 7. Reverse Integer
+Note: 數字反轉
 */
 class Solution {
 public:
