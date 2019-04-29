@@ -16,6 +16,7 @@ public:
         while(left_x < right_x || left_y < right_y){
             int mid_x = (left_x + right_x)/2;
             int mid_y = (left_y + right_y)/2;
+            if()
         }
         
     }
