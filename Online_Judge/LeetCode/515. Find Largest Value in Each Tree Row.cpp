@@ -1,6 +1,6 @@
 /*
 Author: Tony Hsiao
-Date: 2019/05/02
+Date: 2019/05/06
 Topic: 515. Find Largest Value in Each Tree Row
 Note: Linked-List
 */
@@ -16,23 +16,25 @@ Note: Linked-List
 class Solution {
 private:
     vector<int>ans;
-    map<int, int>
+    map<int, int>record_map;
 public:
     int max(int x, int y){
         return (x>y) ? x : y;
     }
     void TraverseTree(TreeNode* root, int level){
         if(root){
-            record[level] = max(record[level], root->val);
+            if(map.find(level) == map.end()) //not found
+                record[level] = root->val;
+            else
+                record[level] = max(record[level], root->val);
             TraverseTree(root->left, level+1);
             TraverseTree(root->right, level+1);
         }
     }
     vector<int> largestValues(TreeNode* root) {
         TraverseTree(root, 0);
-        for(int i=0;i<1000;i++)
-            if(record[i]!=0)
-                ans.push_back(record[i]);
+        for(map<int, int>::iterator iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+            ans.push_back(iter->second);
         return ans;
     }
 };
