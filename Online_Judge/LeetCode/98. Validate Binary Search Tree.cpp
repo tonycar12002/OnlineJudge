@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/01
 Topic: 98. Validate Binary Search Tree
+Speed: 20 ms
 Note: Check the tree is Binary Search Tree
 */
 /**

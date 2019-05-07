@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/06
 Topic: 102. Binary Tree Level Order Traversal
+Speed: 16 ms
 Note: Queue
 */
 /**

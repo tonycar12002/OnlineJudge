@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 22. Generate Parentheses
+Speed: 8 ms
 Note: DFS
 */
 class Solution {

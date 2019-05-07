@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/25
 Topic: 94. Binary Tree Inorder Traversal
+Speed: 4 ms
 Note: Inorder left->root->right
 */
 /**

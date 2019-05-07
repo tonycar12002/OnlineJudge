@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/06
 Topic: 455. Assign Cookies
+Speed: 44 ms
 Note:
 */
 class Solution {

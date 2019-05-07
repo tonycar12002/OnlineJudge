@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2018/05/29
 Topic: 1. Two Sum
+Speed: 9 ms
 Note: 找陣列中兩數相加等於答案的數字，題目必唯一解 => 使用map library
 */
 class Solution {

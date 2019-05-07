@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/01
 Topic: 73. Set Matrix Zeroes
+Speed: 48 ms
 Note: Try to use constant space O(1) solution
 */
 class Solution {

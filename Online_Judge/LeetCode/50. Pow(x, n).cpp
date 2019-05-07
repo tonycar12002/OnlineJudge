@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2018/05/30
 Topic: 50. Pow(x, n)
+Speed: 12 ms
 */
 class Solution {
 public:

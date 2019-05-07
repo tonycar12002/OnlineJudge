@@ -2,7 +2,8 @@
 Author: Tony Hsiao
 Date: 2019/05/01
 Topic: 49. Group Anagrams
-Note: Hash Table to find the anagrams
+Speed: 40 ms
+Note: Hash Table to find the anagrams 
 */
 class Solution {
 private:

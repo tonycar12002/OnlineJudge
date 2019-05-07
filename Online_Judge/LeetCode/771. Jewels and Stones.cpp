@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 771. Jewels and Stones
+Speed: 4 ms
 Note: 字串出現
 */
 class Solution {

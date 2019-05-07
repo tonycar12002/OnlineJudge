@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 21. Merge Two Sorted Lists
+Speed: 8 ms
 Note: Basic Linked List 
 */
 /**

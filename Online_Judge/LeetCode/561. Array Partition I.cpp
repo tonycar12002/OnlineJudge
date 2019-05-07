@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/06
 Topic: 561. Array Partition I
+Speed: 80 ms
 Note:
 */
 class Solution {

@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/06
 Topic: 515. Find Largest Value in Each Tree Row
+Speed: 24 ms
 Note: Linked-List
 */
 /**

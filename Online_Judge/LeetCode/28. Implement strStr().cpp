@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/25
 Topic: 28. Implement strStr()
+Speed: 1364 ms
 Note: Brute Force
 */
 class Solution {

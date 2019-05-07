@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 3. Longest Substring Without Repeating Characters
+Speed: 12 ms
 Note: 利用array確定是否出現過該字元，從左到右跑一次即可完成，記得START更新要做判斷
 */
 

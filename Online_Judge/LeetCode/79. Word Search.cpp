@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/30
 Topic: 79. Word Search
+Speed: 352 ms
 Note: 一個2維文字表，確認字串是否可用連連看(垂直或水平)連起來
 這題容易TLE，如果沒有call by reference 就會TLE
 */

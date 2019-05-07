@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/06
 Topic: 84. Largest Rectangle in Histogram
+Speed: 24 ms
 Note: Brute force O(n*n) will get TLE. Use stack and O(n) to solve it.
 http://www.cnblogs.com/grandyang/p/4322653.html
 當右方柱狀值小於目前STACK頂部的時候，更新最大區域面積

@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/02
 Topic: 101. Symmetric Tree
+Speed: 8 ms
 Note: Linked-List
 */
 /**

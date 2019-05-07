@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 2. Add Two Numbers
+Speed: 28 ms
 Note: Linked-list加法題目
 */
 /**

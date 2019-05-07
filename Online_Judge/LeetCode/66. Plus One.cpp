@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/30
 Topic: 66. Plus One
+Speed: 4 ms
 Note: 最基礎陣列
 */
 class Solution {

@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/30
 Topic: 88. Merge Sorted Array
+Speed: 4 ms
 Note: 
 */
 class Solution {

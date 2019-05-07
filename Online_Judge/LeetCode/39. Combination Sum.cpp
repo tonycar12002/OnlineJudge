@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/01
 Topic: 39. Combination Sum
+Speed: 16 ms
 Note: DFS
 */
 class Solution {

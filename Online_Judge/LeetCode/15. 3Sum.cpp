@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/25
 Topic: 15. 3Sum
+Speed: 104 ms
 Note: Simply three sums problem to two sums problem
 */
 class Solution {

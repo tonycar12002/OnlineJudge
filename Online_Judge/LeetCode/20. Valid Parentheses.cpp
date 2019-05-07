@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 20. Valid Parentheses
+Speed: 8 ms
 Note: 括號匹配
 */
 class Solution {

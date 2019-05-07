@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/30
 Topic: 26. Remove Duplicates from Sorted Array
+Speed: 24 ms
 Note:
 */
 class Solution {

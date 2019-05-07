@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 461. Hamming Distance
+Speed: 4 ms
 Note: 計算兩數字Hamming distance，使用XOR避免TLE，兩數字 直接用除法比較會TLE
 */
 class Solution {

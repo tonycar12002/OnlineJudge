@@ -1,8 +1,9 @@
 /*
 Author: Tony Hsiao
-Date: 2019/04/30
-Topic: 38. Count and Say
-Note: 找到鄰近陣列加起來最大的值
+Date: 2019/05/07
+Topic: 53. Maximum Subarray
+Speed: 4 ms
+Note:
 */
 class Solution {
 public:

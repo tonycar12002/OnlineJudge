@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2018/05/29
 Topic: 9. Palindrome Number
+Speed: 280 ms
 Note: 數字是否迴文
 */
 class Solution {

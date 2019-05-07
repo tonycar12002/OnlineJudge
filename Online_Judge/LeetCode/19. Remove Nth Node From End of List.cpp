@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/25
 Topic: 19. Remove Nth Node From End of List
+Speed: 4 ms
 Note: Linked list
 */
 /**

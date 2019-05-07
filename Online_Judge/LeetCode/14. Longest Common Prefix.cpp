@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/01/09
 Topic: 14. Longest Common Prefix
+Speed: 8 ms
 Note: 純粹找所有字串中開頭字串重複的string
 */
 class Solution {

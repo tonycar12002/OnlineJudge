@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/25
 Topic: 11. Container With Most Water
+Speed: 28 ms
 Note: the max of [(x2-x1) * min(f(x1), f(x2)) ]
 */
 class Solution {

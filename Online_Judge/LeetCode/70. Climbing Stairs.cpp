@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/04/24
 Topic: 70. Climbing Stairs
+Speed: 4 ms
 Note: fibonacci series
 */
 class Solution {

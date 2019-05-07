@@ -2,6 +2,7 @@
 Author: Tony Hsiao
 Date: 2019/05/01
 Topic: 75. Sort Colors
+Speed: 4 ms
 Note: Try to solove the problem in constant space  
 */
 class Solution {
